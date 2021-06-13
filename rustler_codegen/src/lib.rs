@@ -19,6 +19,7 @@ mod record;
 mod tuple;
 mod unit_enum;
 mod untagged_enum;
+mod proplist;
 
 #[derive(Debug)]
 enum RustlerAttr {
@@ -245,4 +246,10 @@ pub fn nif_unit_enum(input: TokenStream) -> TokenStream {
 pub fn nif_untagged_enum(input: TokenStream) -> TokenStream {
     let ast = syn::parse(input).unwrap();
     untagged_enum::transcoder_decorator(&ast).into()
+}
+
+#[proc_macro_derive(NifPropList, attributes(rustler))]
+pub fn nif_proplist(input: TokenStream) -> TokenStream {
+    let ast = syn::parse(input).unwrap();
+    proplist::transcoder_decorator(&ast).into()
 }

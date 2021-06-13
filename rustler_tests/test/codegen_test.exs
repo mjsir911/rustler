@@ -92,6 +92,26 @@ defmodule RustlerTest.CodegenTest do
     end
   end
 
+  describe "proplist" do
+    test "transcoder" do
+      value = [lhs: 1, rhs: true]
+      IO.inspect RustlerTest.proplist_echo(value)
+      assert value == RustlerTest.proplist_echo(value)
+      value = [{:lhs, 1}, :rhs]
+      assert :proplists.unfold(value) == RustlerTest.proplist_echo(value)
+      value = [lhs: 1, rhs: true, lhs: 2]
+      assert :proplists.unfold(value) == RustlerTest.proplist_echo(value)
+    end
+
+    test "with invalid map" do
+      value = %{lhs: "invalid", rhs: 2}
+
+      assert_raise ErlangError, "Erlang error: \"Could not decode field :lhs on %{}\"", fn ->
+        assert value == RustlerTest.map_echo(value)
+      end
+    end
+  end
+
   test "unit enum transcoder" do
     assert :foo_bar == RustlerTest.unit_enum_echo(:foo_bar)
     assert :baz == RustlerTest.unit_enum_echo(:baz)

@@ -1,5 +1,5 @@
 use rustler::types::truthy::Truthy;
-use rustler::{NifMap, NifRecord, NifStruct, NifTuple, NifUnitEnum, NifUntaggedEnum};
+use rustler::{NifMap, NifRecord, NifStruct, NifTuple, NifUnitEnum, NifUntaggedEnum, NifPropList};
 
 #[derive(NifTuple)]
 pub struct AddTuple {
@@ -117,6 +117,17 @@ pub struct TupleStructRecord(i64, i64, i64);
 #[rustler::nif]
 pub fn tuplestruct_record_echo(tuplestruct: TupleStructRecord) -> TupleStructRecord {
     tuplestruct
+}
+
+#[derive(NifPropList)]
+pub struct AddPropList {
+    lhs: i32,
+    rhs: bool,
+}
+
+#[rustler::nif]
+pub fn proplist_echo(map: AddPropList) -> AddPropList {
+    map
 }
 
 pub mod reserved_keywords {
